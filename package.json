@@ -1,0 +1,70 @@
+{
+  "name": "ajv-test",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest",
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "dev:watch": "ts-node-dev --respawn src/index.ts",
+    "check-types": "tsc --noEmit",
+    "eslint": "eslint src/**/*.ts",
+    "eslint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write 'src/**/*.{js,ts,json}'",
+    "lint": "npm-run-all eslint check-types",
+    "lint:fix": "npm-run-all eslint:fix check-types format"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TANAKA-Makoto/bug-free-fiesta.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TANAKA-Makoto/bug-free-fiesta/issues"
+  },
+  "engines": {
+    "node": ">= 12",
+    "npm": ">= 6.14"
+  },
+  "homepage": "https://github.com/TANAKA-Makoto/bug-free-fiesta#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/node": "^11.15.29",
+    "@typescript-eslint/eslint-plugin": "4.4.0",
+    "@typescript-eslint/parser": "4.4.0",
+    "eslint": "7.11.0",
+    "eslint-config-prettier": "6.12.0",
+    "husky": "4.3.0",
+    "jest": "^26.5.2",
+    "lint-staged": "10.4.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.1.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.1",
+    "ts-node": "9.0.0",
+    "ts-node-dev": "1.0.0-pre.63",
+    "typescript": "^4.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.ts": "tsc --noEmit",
+    "*.{js,ts,json}": "prettier --write"
+  },
+  "dependencies": {
+    "@types/ajv": "1.0.0",
+    "ajv": "8.8.1"
+  }
+}
