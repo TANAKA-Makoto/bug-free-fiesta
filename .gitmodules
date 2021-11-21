@@ -1,0 +1,3 @@
+[submodule "raas-front-OAS.git"]
+	path = raas-front-OAS
+	url = git@github.com:onclouds-lab/raas-front-OAS.git
