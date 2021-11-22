@@ -5,6 +5,7 @@ import { glob } from "glob";
 
 import * as fs from "fs";
 import { exit } from "process";
+import { Z_ASCII } from "zlib";
 export const ajv = new Ajv();
 
 type ApiRobotParams = ApiModels.ElevatorParams | ApiModels.NavigationParams;
@@ -23,18 +24,41 @@ const addSchemas = (ajv: Ajv, filePath: string): void => {
   ajv.addSchema(schema, id);
 };
 filePaths.forEach((_) => addSchemas(ajv, _));
-//addSchemas(ajv, "raas-front-OAS/models/common/idObject.v1.json");
 
 // or, if you did not use type annotation for the schema,
 // type parameter can be used to make it type guard:
 // const validate = ajv.compile<MyData>(schema)
-const validate = ajv.getSchema<ApiModels.OwnerParams>("ownerParams.v1.json");
+const validate = ajv.getSchema<ApiModels.FacilityParams>(
+  "facilityParams.v1.json"
+);
 //const robo_validate = ajv.getSchema<ApiRobotParams>("robot");
 //const wp_validate = ajv.getSchema<ApiModels.WaypointParams>("wp");
 const data = {
-  name: "hoge",
-  owned_robot: ["abc"],
-  owned_map: [""],
+  name: "string",
+  countOfFloor: 0,
+  floors: [
+    {
+      translation: { x: "1", y: "4", z: "4" },
+      rotation: { roll: 1, pitch: 4, yaw: 4 },
+      floorNumber: 0,
+      description: "string",
+      maps: [{
+        "map": {
+          "id": "string"
+        },
+        "origin": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "roll": 0,
+          "pitch": 0,
+          "yaw": 0
+        }
+      }],
+    },
+  ],
 };
 if (!validate) {
   exit(2);
