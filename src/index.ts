@@ -18,8 +18,10 @@ type ApiRobotSpecification =
 
 const filePaths: string[] = glob.sync("raas-front-OAS/models/**/*.json");
 const addSchemas = (ajv: Ajv, filePath: string): void => {
-  const schema = JSON.parse(fs.readFileSync(filePath, "utf8"));
-  const id: string = filePath.replace(/raas\-front\-OAS\/models\//, "");
+  const schema = JSON.parse(
+    fs.readFileSync(filePath, "utf8") /* .replace(/\.\.\//g, "") */
+  );
+  const id: string = filePath.replace(/raas\-front\-OAS\/models/, "");
   console.log(id);
   ajv.addSchema(schema, id);
 };
@@ -29,10 +31,13 @@ filePaths.forEach((_) => addSchemas(ajv, _));
 // type parameter can be used to make it type guard:
 // const validate = ajv.compile<MyData>(schema)
 const validate = ajv.getSchema<ApiModels.FacilityParams>(
-  "facilityParams.v1.json"
+  "/facilityParams.v1.json"
 );
-//const robo_validate = ajv.getSchema<ApiRobotParams>("robot");
-//const wp_validate = ajv.getSchema<ApiModels.WaypointParams>("wp");
+const rValidate = ajv.getSchema<ApiRobotParams>("/robotParams.v1.json");
+
+if (!rValidate) {
+  exit(2);
+}
 const data = {
   name: "string",
   countOfFloor: 0,
@@ -42,24 +47,46 @@ const data = {
       rotation: { roll: 1, pitch: 4, yaw: 4 },
       floorNumber: 0,
       description: "string",
-      maps: [{
-        "map": {
-          "id": "string"
+      maps: [
+        {
+          map: {
+            id: "string",
+          },
+          origin: {
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+          rotation: {
+            roll: 0,
+            pitch: 0,
+            yaw: 0,
+          },
         },
-        "origin": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "rotation": {
-          "roll": 0,
-          "pitch": 0,
-          "yaw": 0
-        }
-      }],
+      ],
     },
   ],
 };
+const roboData = {
+  name: "545",
+  type: "elevator",
+  specification: {
+    id: "string",
+    type: "elevator",
+  },
+  owner: {
+    id: "string",
+  },
+  home: {
+    id: "string",
+  },
+};
+if (rValidate(roboData)) {
+  // data is MyData here
+  console.log(roboData.name);
+} else {
+  console.log(rValidate.errors);
+}
 if (!validate) {
   exit(2);
 }
