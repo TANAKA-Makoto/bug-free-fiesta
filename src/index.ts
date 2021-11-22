@@ -19,14 +19,18 @@ const schema_robot: unknown = JSON.parse(
 const schema_wp: unknown = JSON.parse(
   fs.readFileSync("raas-front-OAS/models/waypointParams.v2.json", "utf8")
 );
-
+const schema_id: unknown = JSON.parse(
+  fs.readFileSync("raas-front-OAS/models/common/idObject.v1.json", "utf8")
+);
 const ownerParam: JSONSchemaType<ApiModels.OwnerParams> = schema_owner;
 //const robotParam: JSONSchemaType<ApiRobotParams> = schema_robot;
 const wpParam: JSONSchemaType<ApiModels.WaypointParams> = schema_wp;
+const idST: JSONSchemaType<{ id: string }> = schema_id;
 // validate is a type guard for MyData - type is inferred from schema type
 //const validate = ajv.compile(ownerParam);
 ajv.addSchema(ownerParam, "owner");
 //ajv.addSchema(robotParam, "robot");
+ajv.addSchema(idST, "common/idObject.v1.json");
 ajv.addSchema(wpParam, "wp");
 
 // or, if you did not use type annotation for the schema,
